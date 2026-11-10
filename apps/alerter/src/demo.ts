@@ -8,8 +8,7 @@ import type { Alert, ChainEvent } from '../../../packages/core/src/types.ts';
 import { InsuranceFundDrain, ValidatorIncident, FlaggedAddress, ThreatIntel } from '../../../packages/detectors/src/index.ts';
 import { mataCheck } from '../../../packages/mcp-server/src/check.ts';
 
-const ICON = { info: 'ℹ️ ', low: '🟢', medium: '🟡', high: '🟠', critical: '🔴' } as const;
-const fmt = (a: Alert) => `${ICON[a.severity]} [${a.severity.toUpperCase()}] ${a.title}  (block ${a.height})`;
+const fmt = (a: Alert) => `[${a.severity.toUpperCase()}]`.padEnd(11) + ` ${a.title}  (block ${a.height})`;
 
 const DRAINER = '0xBAD0000000000000000000000000000000000001';
 const intel = new ThreatIntel([{ address: DRAINER, reason: 'synthetic drainer (demo)' }]);
@@ -25,8 +24,8 @@ const events: ChainEvent[] = [
   { kind: 'transfer', height: 105, time: t + 62_000, txHash: '0xdemo', from: '0x1111111111111111111111111111111111111111', to: DRAINER, amount: 250_000, denom: 'USDC' },
 ];
 
-console.log('👁️  MATA — eyes on Injective (offline demo)\n');
+console.log('MATA: eyes on Injective (offline demo)\n');
 for (const e of events) for (const a of engine.process(e)) console.log(fmt(a));
 
-console.log('\n🤖 Agent asks mata_check before paying the drainer address:');
+console.log('\nAn AI agent asks mata_check before paying the drainer address:');
 console.log(mataCheck(intel, { address: DRAINER }));

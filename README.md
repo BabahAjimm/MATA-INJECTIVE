@@ -1,76 +1,115 @@
-# MATA 👁️ Eyes on Injective
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/assets/mata-logo-horizontal-dark.svg">
+    <img src="docs/assets/mata-logo-horizontal-light.svg" alt="MATA" width="420">
+  </picture>
+</p>
 
-**MATA** is short for **M**onitoring **A**gent for **T**hreat **A**nalysis. In Malay, *mata* means "eye" and *mata-mata* means "the watchmen".
+<p align="center"><b>Eyes on Injective.</b> An open-source AI security agent that watches the chain and protects users and AI agents before they sign.</p>
 
-MATA is an open-source AI security agent for [Injective](https://injective.com). It does four things:
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-1F6FD1" alt="License: Apache-2.0"></a>
+  <img src="https://img.shields.io/badge/status-prototype-E8890F" alt="Status: prototype">
+  <img src="https://img.shields.io/badge/node-%E2%89%A522.18-0E1726?logo=nodedotjs&logoColor=white" alt="Node.js 22.18 or later">
+  <img src="https://img.shields.io/badge/tests-10%20passing-1F6FD1" alt="Tests: 10 passing">
+</p>
 
-- **Watches** Injective's native modules (exchange, insurance fund, oracle, staking) and Injective EVM in real time.
-- **Detects** exploit patterns, validator incidents and risky counterparties. Detection uses deterministic rules first and AI triage second.
-- **Scores** the risk of ERC-8004 AI agents operating on Injective.
-- **Answers** "is this safe?" for other agents before they sign a transaction, through an MCP tool (`mata_check`).
+---
 
-> ⚠️ **Status: early prototype, not audited.** It is being built for the Injective Hacker House in Bangkok (Dec 2026). Do not rely on it to protect funds yet.
+**MATA** stands for **M**onitoring **A**gent for **T**hreat **A**nalysis. In Malay, *mata* means "eye" and *mata-mata* means "the watchmen".
+
+MATA works in two layers:
+
+| Layer | Question it answers | What it does |
+|---|---|---|
+| **1. Watch** | "Is something going wrong on Injective right now?" | Watches Injective's native modules (exchange, insurance fund, oracle, staking), Injective EVM and ERC-8004 agents in real time, and flags exploit patterns, validator incidents and risky counterparties. |
+| **2. Protect** | "Is it safe for me to sign this?" | Before a user, dApp or AI agent pays, `mata_check` answers **ALLOW**, **WARN** or **BLOCK**, using what Layer 1 has learned. |
+
+> [!WARNING]
+> **Early prototype, not audited.** MATA is being built for the Injective Hacker House in Bangkok (December 2026). Do not rely on it to protect funds yet.
 
 ## Why
 
-- **Aug 31, 2026:** an incident in Injective's binary-options module, which Injective contained within hours, showed how much native-module monitoring matters. Generic EVM monitors don't understand Injective's native modules.
+- **Aug 31, 2026:** an incident in Injective's binary-options module, which Injective contained within hours, showed how much native-module monitoring matters. Generic EVM monitors do not understand Injective's native modules.
 - **Oct 29, 2026:** a $6.3B exchange hack was carried out through social engineering. AI agents now move funds too, and they can be socially engineered through prompt injection.
-- **Nov 5, 2026:** the INJC staked-INJ ETF launched on Nasdaq and stakes 90%+ of its INJ. Validator and protocol security now matters to institutions as well.
+- **Nov 5, 2026:** the INJC staked-INJ ETF launched on Nasdaq and stakes most of its INJ with validators. Validator and protocol security now matters to institutions as well.
 
-Injective needs a **public, open, Injective-native** security layer. MATA aims to be that layer, complementing the core team's own monitoring.
-
-## Architecture
-
-```
-Injective (native modules + EVM + ERC-8004 registries)
-        │  indexer / chain stream / JSON-RPC
-        ▼
-  ingest ──► detectors (rules → anomaly → threat intel) ──► triage (AI)
-                                   │                          │
-                                   ▼                          ▼
-                     mcp-server: mata_check           alerter (Telegram/webhook)
-                     (pre-transaction check)          dashboard
-```
-
-| Package | What it does | Status |
-|---|---|---|
-| `packages/core` | Shared types (`ChainEvent`, `Alert`, `Detector`) and the detection engine | ✅ |
-| `packages/detectors` | Insurance-fund drain, validator jailing/slashing, flagged-address interaction | ✅ first 3 rules |
-| `packages/ingest` | Injective EVM JSON-RPC poller (native module streaming coming next) | 🚧 |
-| `packages/triage` | Builds prompts for LLM incident reports; LLM is called only for flagged events | 🚧 |
-| `packages/mcp-server` | `mata_check(address)` pre-transaction safety check | 🚧 core logic |
-| `apps/alerter` | Formats alerts; runs an offline demo | ✅ demo |
-| `apps/dashboard` | Live view of incidents, markets and agents | 📋 planned |
+Injective needs a **public, open, Injective-native** security layer. MATA aims to be that layer, alongside the core team's own monitoring.
 
 ## Quick start
 
 Requires Node.js 22.18 or later. TypeScript runs natively, so there is no build step.
 
 ```bash
-npm test          # run detector tests
+npm test          # run the detector and mata_check tests
 npm run demo      # offline demo: feed sample events, print alerts
 ```
+
+The demo uses synthetic data only and makes no network calls:
+
+```text
+MATA: eyes on Injective (offline demo)
+
+[CRITICAL]  Insurance fund for DEMO-PERP fell 62.0% within 10 min  (block 103)
+[HIGH]      Validator jailed: demo-validator (injvaloper1demo)  (block 104)
+[HIGH]      Transfer to flagged address 0xBAD0000000000000000000000000000000000001: synthetic drainer (demo)  (block 105)
+
+An AI agent asks mata_check before paying the drainer address:
+{
+  verdict: 'BLOCK',
+  address: '0xBAD0000000000000000000000000000000000001',
+  reasons: [ 'counterparty flagged: synthetic drainer (demo)' ]
+}
+```
+
+## Architecture
+
+```text
+Injective (native modules + EVM + ERC-8004 registries)
+        |  indexer / chain stream / JSON-RPC
+        v
+  ingest --> detectors (rules, anomaly, threat intel) --> triage (AI)
+                          |                                   |
+                          v                                   v
+            mcp-server: mata_check                  alerter (Telegram, webhook)
+            (pre-transaction check)                 dashboard
+```
+
+| Package | What it does | Status |
+|---|---|---|
+| `packages/core` | Shared types (`ChainEvent`, `Alert`, `Detector`) and the detection engine | Working |
+| `packages/detectors` | Insurance-fund drain, validator jailing and slashing, flagged-address interaction | Working (first 3 rules) |
+| `packages/mcp-server` | `mata_check(address)` pre-transaction safety check | Core logic working, MCP wiring next |
+| `apps/alerter` | Formats alerts and runs the offline demo | Working (demo) |
+| `packages/ingest` | Injective EVM JSON-RPC poller; native module streaming comes next | In progress |
+| `packages/triage` | Builds prompts for plain-language incident reports; the LLM is called only for flagged events | In progress |
+| `apps/dashboard` | Public live view of incidents, markets and agents | Planned |
+
+See [docs/threat-model.md](docs/threat-model.md) for the threats MATA covers and the detector for each.
 
 ## Design principles
 
 1. **Rules first, AI second.** Critical detection is deterministic and fast. AI filters false positives, explains incidents in plain language and helps find new patterns.
-2. **Read-only.** MATA never holds funds or keys and cannot halt the chain. It only watches and warns.
-3. **Responsible disclosure.** Unpatched vulnerabilities go privately to Injective first.
-4. **Replay signals, never attacks.** Scenarios in `replays/` recreate only the observable on-chain signals of patched incidents, using synthetic data or a local fork. There is no exploit code in this repo.
+2. **Read-only.** MATA never holds funds or keys and cannot halt the chain. It only watches and advises.
+3. **Responsible disclosure.** Unpatched vulnerabilities go privately to the Injective team first.
+4. **Signals, never exploits.** Scenarios in `replays/` recreate only the observable on-chain signals of patched incidents, using synthetic data or a local fork. There is no exploit code in this repo.
+5. **Alongside, not instead.** MATA is built to complement the monitoring Injective already has.
 
 ## Roadmap
 
-- [ ] Stream native module events (exchange, insurance, oracle, staking)
-- [ ] Signal replay of a patched incident (synthetic data / local fork)
-- [ ] AI triage with incident reports
+- [x] Detection engine and first 3 detectors, with tests
+- [x] `mata_check` core logic, with tests
+- [ ] Stream native module events (exchange, insurance fund, oracle, staking)
+- [ ] Signal replay of a patched incident (synthetic data or local fork)
+- [ ] AI triage with plain-language incident reports
 - [ ] ERC-8004 agent risk scoring that writes to the Reputation Registry
 - [ ] MCP server wiring (`mata_check`, `mata_incidents`, `mata_agent_score`)
 - [ ] Register MATA itself as an ERC-8004 agent
-- [ ] Dashboard
+- [ ] Public dashboard
 
 ## Security
 
-See [SECURITY.md](SECURITY.md).
+Found a vulnerability in MATA or in Injective? Please report it privately. See [SECURITY.md](SECURITY.md).
 
 ## License
 
