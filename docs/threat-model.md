@@ -2,7 +2,7 @@
 
 | Threat | Signal | Detector | Status |
 |---|---|---|---|
-| Derivative/settlement exploit (e.g. Aug 31, 2026 binary options) | Insurance fund drops fast | `insurance-fund-drain` | ✅ |
+| Derivative/settlement exploit (e.g. the Aug 31, 2026 incident) | Insurance fund drops fast | `insurance-fund-drain` | ✅ |
 | Validator failure / misbehaviour | Jailing, slashing, double-sign | `validator-incident` | ✅ |
 | Stolen-fund movement / drainers | Transfers touching flagged addresses | `flagged-address` | ✅ |
 | Oracle manipulation | Oracle price deviates from reference | `oracle-deviation` | 📋 |
