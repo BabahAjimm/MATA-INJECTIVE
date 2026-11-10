@@ -76,4 +76,4 @@ See [SECURITY.md](SECURITY.md).
 
 [Apache-2.0](LICENSE). See [NOTICE](NOTICE) for attribution. Built in Malaysia by [TALEtech](https://taletech.my).
 
-"MATA", "MATA Labs" and the MATA² logo are trademarks of TALEtech (Triple A Legacy Empire Sdn. Bhd.). The license covers the code, not the name. Forks must use a different name.
+"MATA", "MATA Labs" and the MATA logo are trademarks of TALEtech (Triple A Legacy Empire Sdn. Bhd.). The license covers the code, not the name. Forks must use a different name.
