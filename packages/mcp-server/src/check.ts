@@ -25,8 +25,13 @@ export function mataCheck(intel: ThreatIntel, input: CheckInput): CheckResult {
 
   const flag = intel.lookup(input.address);
   if (flag) {
-    verdict = 'BLOCK';
-    reasons.push(`counterparty flagged: ${flag}`);
+    if (flag.severity === 'warn') {
+      if (verdict === 'ALLOW') verdict = 'WARN';
+      reasons.push(`counterparty warning: ${flag.reason}`);
+    } else {
+      verdict = 'BLOCK';
+      reasons.push(`counterparty flagged: ${flag.reason}`);
+    }
   }
 
   if (input.agentRiskScore !== undefined) {

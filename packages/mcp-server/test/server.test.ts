@@ -81,3 +81,24 @@ test('MCP returns error for unknown method', () => {
   assert.equal(res?.error?.code, -32601);
 });
 
+test('MCP tools/call mata_check returns WARN for burn address without isError', () => {
+  const res = handleMcpMessage({
+    jsonrpc: '2.0',
+    id: 6,
+    method: 'tools/call',
+    params: {
+      name: 'mata_check',
+      arguments: {
+        address: '0x000000000000000000000000000000000000dead',
+      },
+    },
+  });
+
+  assert.equal(res?.id, 6);
+  const result = res?.result as { content: Array<{ text: string }>; isError: boolean };
+  assert.equal(result.isError, false);
+  const parsed = JSON.parse(result.content[0].text);
+  assert.equal(parsed.verdict, 'WARN');
+  assert.match(parsed.reasons[0], /burn address/);
+});
+

@@ -20,3 +20,12 @@ test('medium agent risk → WARN, high → BLOCK', () => {
   assert.equal(mataCheck(intel, { address: a, agentRiskScore: 60 }).verdict, 'WARN');
   assert.equal(mataCheck(intel, { address: a, agentRiskScore: 90 }).verdict, 'BLOCK');
 });
+
+test('burn address → WARN, not BLOCK', () => {
+  const customIntel = new ThreatIntel([
+    { address: '0x000000000000000000000000000000000000dead', reason: 'known burn address', severity: 'warn' },
+  ]);
+  const r = mataCheck(customIntel, { address: '0x000000000000000000000000000000000000dead' });
+  assert.equal(r.verdict, 'WARN');
+  assert.match(r.reasons[0], /burn address/);
+});

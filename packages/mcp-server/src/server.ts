@@ -7,8 +7,8 @@ import { mataCheck, type CheckInput } from './check.ts';
  * Can be augmented dynamically via API or on-chain feeds.
  */
 export const defaultIntel = new ThreatIntel([
-  { address: '0xBAD0000000000000000000000000000000000001', reason: 'synthetic drainer (demo)' },
-  { address: '0x000000000000000000000000000000000000dead', reason: 'burn address' },
+  { address: '0xBAD0000000000000000000000000000000000001', reason: 'synthetic drainer (demo)', severity: 'block' },
+  { address: '0x000000000000000000000000000000000000dead', reason: 'known burn address (permanent loss if unintended)', severity: 'warn' },
 ]);
 
 export interface JsonRpcRequest {

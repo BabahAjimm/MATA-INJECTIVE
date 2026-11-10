@@ -11,7 +11,7 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-1F6FD1" alt="License: Apache-2.0"></a>
   <img src="https://img.shields.io/badge/status-prototype-E8890F" alt="Status: prototype">
   <img src="https://img.shields.io/badge/node-%E2%89%A522.18-0E1726?logo=nodedotjs&logoColor=white" alt="Node.js 22.18 or later">
-  <img src="https://img.shields.io/badge/tests-10%20passing-1F6FD1" alt="Tests: 10 passing">
+  <img src="https://img.shields.io/badge/tests-17%20passing-1F6FD1" alt="Tests: 17 passing">
   <a href="docs/pitch-deck.pdf"><img src="https://img.shields.io/badge/pitch%20deck-v4%20(PDF)-1F6FD1" alt="Pitch Deck"></a>
 </p>
 
@@ -42,8 +42,9 @@ Injective needs a **public, open, Injective-native** security layer. MATA aims t
 Requires Node.js 22.18 or later. TypeScript runs natively, so there is no build step.
 
 ```bash
-npm test          # run the detector and mata_check tests
+npm test          # run tests (engine, detectors, MCP server, pre-tx check)
 npm run demo      # offline demo: feed sample events, print alerts
+npm run replay    # incident replay: synthetic insurance fund drain
 ```
 
 The demo uses synthetic data only and makes no network calls:
@@ -79,10 +80,11 @@ Injective (native modules + EVM + ERC-8004 registries)
 | Package | What it does | Status |
 |---|---|---|
 | `packages/core` | Shared types (`ChainEvent`, `Alert`, `Detector`) and the detection engine | Working |
-| `packages/detectors` | Insurance-fund drain, validator jailing and slashing, flagged-address interaction | Working (first 3 rules) |
-| `packages/mcp-server` | `mata_check(address)` pre-transaction safety check | Core logic working, MCP wiring next |
+| `packages/detectors` | Insurance-fund drain, validator jailing/slashing, flagged-address/burn-address check | Working (first 3 rules) |
+| `packages/mcp-server` | `mata_check(address)` pre-transaction safety check over Model Context Protocol | Working (stdio MCP server) |
 | `apps/alerter` | Formats alerts and runs the offline demo | Working (demo) |
-| `packages/ingest` | Injective EVM JSON-RPC poller; native module streaming comes next | In progress |
+| `packages/ingest` | Injective EVM JSON-RPC client connected to live testnet | Working |
+| `replays` | Patched incident replay simulation (synthetic insurance fund drain) | Working |
 | `packages/triage` | Builds prompts for plain-language incident reports; the LLM is called only for flagged events | In progress |
 | `apps/dashboard` | Public live view of incidents, markets and agents | Planned |
 
@@ -100,11 +102,12 @@ See [docs/threat-model.md](docs/threat-model.md) for the threats MATA covers and
 
 - [x] Detection engine and first 3 detectors, with tests
 - [x] `mata_check` core logic, with tests
+- [x] Stdio MCP server wiring (`mata_check` pre-transaction check)
+- [x] Signal replay of an incident (`npm run replay`, synthetic data)
+- [x] Injective testnet EVM JSON-RPC connectivity check
 - [ ] Stream native module events (exchange, insurance fund, oracle, staking)
-- [ ] Signal replay of a patched incident (synthetic data or local fork)
 - [ ] AI triage with plain-language incident reports
 - [ ] ERC-8004 agent risk scoring that writes to the Reputation Registry
-- [ ] MCP server wiring (`mata_check`, `mata_incidents`, `mata_agent_score`)
 - [ ] Register MATA itself as an ERC-8004 agent
 - [ ] Public dashboard
 
