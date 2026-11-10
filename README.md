@@ -12,6 +12,7 @@
   <img src="https://img.shields.io/badge/status-prototype-E8890F" alt="Status: prototype">
   <img src="https://img.shields.io/badge/node-%E2%89%A522.18-0E1726?logo=nodedotjs&logoColor=white" alt="Node.js 22.18 or later">
   <img src="https://img.shields.io/badge/tests-10%20passing-1F6FD1" alt="Tests: 10 passing">
+  <a href="docs/pitch-deck.pdf"><img src="https://img.shields.io/badge/pitch%20deck-v3%20(PDF)-1F6FD1" alt="Pitch Deck"></a>
 </p>
 
 ---
@@ -85,7 +86,7 @@ Injective (native modules + EVM + ERC-8004 registries)
 | `packages/triage` | Builds prompts for plain-language incident reports; the LLM is called only for flagged events | In progress |
 | `apps/dashboard` | Public live view of incidents, markets and agents | Planned |
 
-See [docs/threat-model.md](docs/threat-model.md) for the threats MATA covers and the detector for each.
+See [docs/threat-model.md](docs/threat-model.md) for the threats MATA covers and the detector for each, and the [MATA Pitch Deck (PDF)](docs/pitch-deck.pdf) for the hacker house onboarding presentation.
 
 ## Design principles
 
