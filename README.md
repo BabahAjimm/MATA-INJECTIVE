@@ -12,7 +12,7 @@
   <img src="https://img.shields.io/badge/status-prototype-E8890F" alt="Status: prototype">
   <img src="https://img.shields.io/badge/node-%E2%89%A522.23.4-0E1726?logo=nodedotjs&logoColor=white" alt="Node.js 22.23.4 or later">
   <img src="https://img.shields.io/badge/tests-17%20passing-1F6FD1" alt="Tests: 17 passing">
-  <a href="docs/pitch-deck.pdf"><img src="https://img.shields.io/badge/pitch%20deck-v4%20(PDF)-1F6FD1" alt="Pitch Deck"></a>
+  <a href="docs/pitch-deck.pdf"><img src="https://img.shields.io/badge/pitch%20deck-v5%20(PDF)-1F6FD1" alt="Pitch Deck"></a>
 </p>
 
 ---
