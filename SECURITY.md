@@ -17,6 +17,7 @@ If MATA (or anyone using it) finds an issue that has not been patched:
 ## Scope of replays
 
 Everything in `replays/` must:
-- cover a **patched** incident only;
-- run on **testnet or a local fork only**, never mainnet;
+- recreate **observable on-chain signals only**, never exploit code or attack transactions;
+- cover a **patched** incident only, reviewed with the affected team before public use;
+- use **synthetic data, a local fork or testnet only**, never mainnet;
 - exist only to test detection, never to move real funds.

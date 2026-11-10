@@ -13,7 +13,7 @@ MATA is an open-source AI security agent for [Injective](https://injective.com).
 
 ## Why
 
-- **Aug 31, 2026:** an exploit in Injective's binary-options module drained about $4.9M and stopped block production for about 4 hours. Generic EVM monitors don't understand Injective's native modules.
+- **Aug 31, 2026:** an incident in Injective's binary-options module, which Injective contained within hours, showed how much native-module monitoring matters. Generic EVM monitors don't understand Injective's native modules.
 - **Oct 29, 2026:** a $6.3B exchange hack was carried out through social engineering. AI agents now move funds too, and they can be socially engineered through prompt injection.
 - **Nov 5, 2026:** the INJC staked-INJ ETF launched on Nasdaq and stakes 90%+ of its INJ. Validator and protocol security now matters to institutions as well.
 
@@ -55,12 +55,13 @@ npm run demo      # offline demo: feed sample events, print alerts
 
 1. **Rules first, AI second.** Critical detection is deterministic and fast. AI filters false positives, explains incidents in plain language and helps find new patterns.
 2. **Read-only.** MATA never holds funds or keys and cannot halt the chain. It only watches and warns.
-3. **Responsible disclosure.** Unpatched vulnerabilities go privately to Injective first. Replays in `replays/` cover patched incidents only, and run on testnet or a local fork only.
+3. **Responsible disclosure.** Unpatched vulnerabilities go privately to Injective first.
+4. **Replay signals, never attacks.** Scenarios in `replays/` recreate only the observable on-chain signals of patched incidents, using synthetic data or a local fork. There is no exploit code in this repo.
 
 ## Roadmap
 
 - [ ] Stream native module events (exchange, insurance, oracle, staking)
-- [ ] Replay of a patched exploit pattern on testnet/fork
+- [ ] Signal replay of a patched incident (synthetic data / local fork)
 - [ ] AI triage with incident reports
 - [ ] ERC-8004 agent risk scoring that writes to the Reputation Registry
 - [ ] MCP server wiring (`mata_check`, `mata_incidents`, `mata_agent_score`)
