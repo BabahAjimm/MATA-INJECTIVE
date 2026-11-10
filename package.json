@@ -10,7 +10,9 @@
   "scripts": {
     "test": "node --test \"packages/*/test/*.test.ts\"",
     "typecheck": "tsc --noEmit",
-    "demo": "node apps/alerter/src/demo.ts"
+    "demo": "node apps/alerter/src/demo.ts",
+    "replay": "node replays/insuranceDrain.ts",
+    "mcp": "node packages/mcp-server/src/server.ts"
   },
   "devDependencies": {
     "typescript": "^5.6.0",
