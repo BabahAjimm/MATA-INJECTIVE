@@ -5,7 +5,7 @@
   "description": "MATA (Monitoring Agent for Threat Analysis). Eyes on Injective.",
   "license": "Apache-2.0",
   "type": "module",
-  "engines": { "node": ">=22.18" },
+  "engines": { "node": ">=22.23.4" },
   "workspaces": ["packages/*", "apps/*"],
   "scripts": {
     "test": "node --test \"packages/*/test/*.test.ts\"",

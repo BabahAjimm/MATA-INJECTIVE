@@ -10,7 +10,7 @@
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-1F6FD1" alt="License: Apache-2.0"></a>
   <img src="https://img.shields.io/badge/status-prototype-E8890F" alt="Status: prototype">
-  <img src="https://img.shields.io/badge/node-%E2%89%A522.18-0E1726?logo=nodedotjs&logoColor=white" alt="Node.js 22.18 or later">
+  <img src="https://img.shields.io/badge/node-%E2%89%A522.23.4-0E1726?logo=nodedotjs&logoColor=white" alt="Node.js 22.23.4 or later">
   <img src="https://img.shields.io/badge/tests-17%20passing-1F6FD1" alt="Tests: 17 passing">
   <a href="docs/pitch-deck.pdf"><img src="https://img.shields.io/badge/pitch%20deck-v4%20(PDF)-1F6FD1" alt="Pitch Deck"></a>
 </p>
@@ -39,7 +39,7 @@ Injective needs a **public, open, Injective-native** security layer. MATA aims t
 
 ## Quick start
 
-Requires Node.js 22.18 or later. TypeScript runs natively, so there is no build step.
+Requires Node.js 22.23.4 or later. TypeScript runs natively, so there is no build step.
 
 ```bash
 npm test          # run tests (engine, detectors, MCP server, pre-tx check)
