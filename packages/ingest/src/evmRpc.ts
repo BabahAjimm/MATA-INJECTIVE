@@ -1,6 +1,9 @@
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
+
 /**
  * Minimal Injective EVM JSON-RPC client (no dependencies).
- * Endpoint comes from INJ_EVM_RPC_URL. Verify it against docs.injective.network.
+ * Endpoint comes from INJ_EVM_RPC_URL. Default: Injective testnet (Chain ID 1439).
  *
  * Next: native module streaming (exchange, insurance, oracle, staking) via the
  * Injective indexer / chain stream API, normalized into ChainEvent.
@@ -36,8 +39,12 @@ export class EvmRpc {
   }
 }
 
-// `node packages/ingest/src/evmRpc.ts` → quick connectivity check.
-if (import.meta.url === `file://${process.argv[1]}`) {
-  const rpc = new EvmRpc(process.env.INJ_EVM_RPC_URL ?? '');
-  console.log({ chainId: await rpc.chainId(), block: await rpc.blockNumber() });
+// `node packages/ingest/src/evmRpc.ts` -> live connectivity check against Injective testnet.
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  const defaultTestnet = 'https://k8s.testnet.json-rpc.injective.network/';
+  const url = process.env.INJ_EVM_RPC_URL || defaultTestnet;
+  console.log(`Checking connection to Injective EVM RPC (${url})...`);
+  const rpc = new EvmRpc(url);
+  const [chainId, blockNumber] = await Promise.all([rpc.chainId(), rpc.blockNumber()]);
+  console.log({ chainId, blockNumber, status: 'CONNECTED' });
 }
