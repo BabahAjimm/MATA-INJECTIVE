@@ -11,6 +11,8 @@
 | Malicious / compromised AI agent (ERC-8004) | Agent interacts with flagged entities, sudden behaviour change | `agent-scoring` | Planned |
 | ERC-8004 reputation manipulation (Sybil, collusion, bought identities) | Clusters of agents rating each other, agent ID transfers, feedback without a real transaction | `agent-scoring` | Planned |
 | Prompt-injected agent paying attacker | Pre-tx check on counterparty | `mata_check` (MCP) | In progress |
+| Slow scam via collection wallet (pig-butchering, fake investment) | Many unrelated one-way senders, new address with no other activity, fast forwarding to exchange or bridge, links to reported wallets | `collection-wallet` (risk score) | Planned |
+| Fake or flooded scam reports | Reports without a payment from the reporter, bursts of reports from new accounts | `report-verification` | Planned |
 
 ## Out of scope
 - MATA does not hold keys, sign, or halt the chain.
